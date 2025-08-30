@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: expense-tracker-frontend
+    env: static
+    plan: free
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://your-backend-service-name.onrender.com
