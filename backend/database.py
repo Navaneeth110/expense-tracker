@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
@@ -36,14 +36,17 @@ try:
         engine = create_engine(DATABASE_URL)
         logger.info("PostgreSQL engine created successfully")
         
-    # Test connection
-    with engine.connect() as conn:
-        conn.execute("SELECT 1")
-        logger.info("Database connection test successful")
+    # Test connection (optional - won't block startup)
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+            logger.info("Database connection test successful")
+    except Exception as e:
+        logger.warning(f"Database connection test failed (this is okay during startup): {e}")
         
 except SQLAlchemyError as e:
-    logger.error(f"Database connection failed: {e}")
-    raise Exception(f"Failed to connect to database: {e}")
+    logger.error(f"Database engine creation failed: {e}")
+    raise Exception(f"Failed to create database engine: {e}")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

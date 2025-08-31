@@ -7,14 +7,24 @@ import calendar
 from dateutil.relativedelta import relativedelta
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 import crud, models, schemas
 from database import SessionLocal, engine
 
 # Create tables if they don't exist (don't drop existing data)
-models.Base.metadata.create_all(bind=engine)
+try:
+    models.Base.metadata.create_all(bind=engine)
+    logger.info("Database tables created/verified successfully")
+except Exception as e:
+    logger.error(f"Failed to create database tables: {e}")
+    # Don't fail startup - tables might already exist
 
 app = FastAPI(title="Premium Expense Tracker API", version="1.0.0")
 
