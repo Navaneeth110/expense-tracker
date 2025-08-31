@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatDate, getCategoryIcon, getCategoryColor } from '@/lib/utils'
+import { expensesApi, billsApi } from '@/lib/api'
 
 interface BillPaymentMode {
   id: number
@@ -41,12 +42,12 @@ export default function Bills() {
 
   const { data: bills, isLoading } = useQuery({
     queryKey: ['bills', year, month],
-    queryFn: () => fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/bills/?year=${year}&month=${String(month).padStart(2, '0')}`).then(res => res.json()),
+    queryFn: () => billsApi.getBills(year, month),
   })
 
   const markPaidMutation = useMutation({
     mutationFn: (expenseId: number) => 
-      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/expenses/${expenseId}/mark-paid`, { method: 'POST' }).then(res => res.json()),
+      expensesApi.markExpenseAsPaid(expenseId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bills', year, month] })
       queryClient.invalidateQueries({ queryKey: ['emi-expenses'] })
@@ -67,7 +68,7 @@ export default function Bills() {
 
   const markUnpaidMutation = useMutation({
     mutationFn: (expenseId: number) => 
-      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/expenses/${expenseId}/mark-unpaid`, { method: 'POST' }).then(res => res.json()),
+      expensesApi.markExpenseAsUnpaid(expenseId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bills', year, month] })
       queryClient.invalidateQueries({ queryKey: ['emi-expenses'] })

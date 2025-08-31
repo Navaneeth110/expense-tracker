@@ -209,4 +209,10 @@ export const dashboardApi = {
   getExpenseTrends: () => api.get<ExpenseTrend[]>('/dashboard/expense-trends').then(res => res.data),
 }
 
+// Bills API
+export const billsApi = {
+  getBills: (year: number, month: number) => 
+    api.get(`/bills/?year=${year}&month=${String(month).padStart(2, '0')}`).then(res => res.data),
+}
+
 export default api

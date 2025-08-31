@@ -4,10 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Edit, Trash2, Target, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { budgetsApi, Budget, BudgetCreate } from '@/lib/api'
+import { budgetsApi, dashboardApi, Budget, BudgetCreate } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, getCategoryIcon, getCategoryColor } from '@/lib/utils'
-import { dashboardApi } from '@/lib/api/dashboard'
 
 interface BudgetFormData {
   category: string
