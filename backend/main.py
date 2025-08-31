@@ -6,25 +6,25 @@ from datetime import datetime, date
 import calendar
 from dateutil.relativedelta import relativedelta
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 import crud, models, schemas
 from database import SessionLocal, engine
 
-# Drop and recreate all tables to handle schema changes
-models.Base.metadata.drop_all(bind=engine)
+# Create tables if they don't exist (don't drop existing data)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Premium Expense Tracker API", version="1.0.0")
 
+# Get CORS origins from environment variables
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://*.onrender.com",  # Allow Render domains
-        "https://*.render.com",    # Allow Render domains
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

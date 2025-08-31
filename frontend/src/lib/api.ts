@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // API configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (import.meta.env.DEV ? 'http://localhost:8000' : '/api')
 
 // Create axios instance
 export const api = axios.create({
@@ -11,6 +12,15 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+// Add request interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error)
+    return Promise.reject(error)
+  }
+)
 
 // Types
 export interface PaymentMode {

@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { expensesApi } from '@/lib/api'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -39,7 +40,7 @@ export default function EMIs() {
 
   const { data: emiExpenses, isLoading } = useQuery({
     queryKey: ['emi-expenses'],
-    queryFn: () => fetch('/api/emi/').then(res => res.json()),
+    queryFn: () => expensesApi.getEMIExpenses(),
   })
 
   if (isLoading) {

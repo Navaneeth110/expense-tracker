@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { budgetsApi, Budget, BudgetCreate } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, getCategoryIcon, getCategoryColor } from '@/lib/utils'
+import { dashboardApi } from '@/lib/api/dashboard'
 
 interface BudgetFormData {
   category: string
@@ -38,7 +39,7 @@ export default function Budgets() {
 
   const { data: budgetUsage } = useQuery({
     queryKey: ['budget-usage'],
-    queryFn: () => fetch('http://localhost:8000/dashboard/budget-usage').then(res => res.json()),
+    queryFn: () => dashboardApi.getBudgetUsage(),
   })
 
   const createMutation = useMutation({

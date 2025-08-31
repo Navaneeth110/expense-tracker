@@ -41,12 +41,12 @@ export default function Bills() {
 
   const { data: bills, isLoading } = useQuery({
     queryKey: ['bills', year, month],
-    queryFn: () => fetch(`/api/bills/?year=${year}&month=${String(month).padStart(2, '0')}`).then(res => res.json()),
+    queryFn: () => fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/bills/?year=${year}&month=${String(month).padStart(2, '0')}`).then(res => res.json()),
   })
 
   const markPaidMutation = useMutation({
     mutationFn: (expenseId: number) => 
-      fetch(`/api/expenses/${expenseId}/mark-paid`, { method: 'POST' }).then(res => res.json()),
+      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/expenses/${expenseId}/mark-paid`, { method: 'POST' }).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bills', year, month] })
       queryClient.invalidateQueries({ queryKey: ['emi-expenses'] })
@@ -67,7 +67,7 @@ export default function Bills() {
 
   const markUnpaidMutation = useMutation({
     mutationFn: (expenseId: number) => 
-      fetch(`/api/expenses/${expenseId}/mark-unpaid`, { method: 'POST' }).then(res => res.json()),
+      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/expenses/${expenseId}/mark-unpaid`, { method: 'POST' }).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bills', year, month] })
       queryClient.invalidateQueries({ queryKey: ['emi-expenses'] })
