@@ -14,4 +14,7 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  define: {
+    'import.meta.env': 'import.meta.env'
+  }
 })
